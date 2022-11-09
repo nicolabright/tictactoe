@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <time.h>
 
 typedef int bool;
 #define true 1
@@ -59,15 +59,39 @@ void setActionPlayerX(struct MapSituation *mappa, int cellaPos) {
 	(*mappa).mappaValue[cellaPos] = 2;
 }
 
+bool isCellUsed(struct MapSituation *mappa, int cellaPos) {
+	if ((*mappa).mappaValue[cellaPos] != 0) {
+		return true;
+	}
+	return false;
+}
+
+int countCellsFree(struct MapSituation *mappa) {
+	int countCellFree = 0;
+	for (int iPos=1; iPos<=9; iPos++) {
+		if ((*mappa).mappaValue[iPos] == 0) countCellFree++;
+	}
+	return (countCellFree);
+}
 
 void main() {
 	struct MapSituation map;
 
 	ClearMap(&map);
+	srand( time(0) );
 	PrintGrid(&map);
-	setActionPlayerO(&map, 2);
-	PrintGrid(&map);
-	setActionPlayerX(&map, 5);
-	PrintGrid(&map);
+	int iIter = 0;
+	while( countCellsFree(&map)>0 ) {
+		int nextPos = 0;
+		do {
+			nextPos = (rand() % 9) + 1;
+		} while (isCellUsed(&map, nextPos));
+		if (++iIter % 2 == 0) {
+			setActionPlayerO(&map, nextPos);
+		} else {
+			setActionPlayerX(&map, nextPos);
+		}
+		PrintGrid(&map);
+	}
 
 }

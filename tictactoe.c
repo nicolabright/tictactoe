@@ -105,7 +105,7 @@ int evaluateTerna(struct MapSituation *mappa, int cella1, int cella2, int cella3
 
 int evaluateMap(struct MapSituation *mappa, int player) {
 	int valoreMappa = 0;
-	// Valuta il rischio di mosse CONTRO il player attuale (valuta la miglior DIFESA)
+	// Valuta sia in ATTACCO che in DIFESA, per ogni linea possibile
 	// controllo Righe
 	valoreMappa += evaluateTerna(mappa, 7, 8, 9, player);
 	valoreMappa += evaluateTerna(mappa, 4, 5, 6, player);

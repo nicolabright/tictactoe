@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 typedef int bool;
 #define true 1
 #define false 0
+
+#define PLAYER_O	0
+#define PLAYER_X	1
+
 
 struct MapSituation {
 	int mappaValue[9];
@@ -12,6 +15,14 @@ struct MapSituation {
 	struct MapSituation *actionsToMap[9];
 };
 
+
+void CopyMapStituation(struct MapSituation *mappaFrom, struct MapSituation *mappaTo) {
+	for (int iPos=1; iPos<=9; iPos++) {
+		(*mappaTo).mappaValue[iPos] = (*mappaFrom).mappaValue[iPos];
+		(*mappaTo).actionsToMap[iPos] = (*mappaFrom).actionsToMap[iPos];
+	}
+	(*mappaTo).score = (*mappaFrom).score;
+}
 
 void ClearMap(struct MapSituation *mappa) {
 	(*mappa).mappaValue[1] = 0;
@@ -74,21 +85,47 @@ int countCellsFree(struct MapSituation *mappa) {
 	return (countCellFree);
 }
 
+int getEvaluation(struct MapSituation *mappa, int testMove, int player) {
+	struct MapSituation testMap;
+	CopyMapStituation(mappa, &testMap);
+	if (player == PLAYER_O) {
+		setActionPlayerO(&testMap, testMove);
+	} else {
+		setActionPlayerX(&testMap, testMove);
+	}
+	// Evaluation
+	return (testMove);
+}
+
+int getNextBestMove(struct MapSituation *mappa, int player) {
+	int bestValue = -999;
+	int bestMove = 0;
+	for (int iTestMove=1; iTestMove<=9; iTestMove++) {
+		if (!isCellUsed(mappa, iTestMove)) {
+			int newValue = iTestMove; //  getEvaluation(mappa, iTestMove, player);
+			if (bestValue < newValue) {
+				bestValue = newValue;
+				bestMove = iTestMove;
+			}
+		}
+	}
+	printf("===> PLAYER=%d @ posiz=%d\n", player, bestMove);
+	return (bestMove);
+}
+
 void main() {
 	struct MapSituation map;
 
 	ClearMap(&map);
-	srand( time(0) );
 	PrintGrid(&map);
 	int iIter = 0;
-	while( countCellsFree(&map)>0 ) {
-		int nextPos = 0;
-		do {
-			nextPos = (rand() % 9) + 1;
-		} while (isCellUsed(&map, nextPos));
-		if (++iIter % 2 == 0) {
+	int nextPos = 0;
+	while( countCellsFree(&map) > 0 ) {
+		if ( (++iIter % 2) == 0) {
+			nextPos = getNextBestMove(&map, PLAYER_O);
 			setActionPlayerO(&map, nextPos);
 		} else {
+			nextPos = getNextBestMove(&map, PLAYER_X);
 			setActionPlayerX(&map, nextPos);
 		}
 		PrintGrid(&map);

@@ -11,13 +11,20 @@ typedef int bool;
 #define PLAYER_O	1
 #define PLAYER_X	2
 
+#define STATUS_NORMAL_GAME	0
+#define STATUS_LOSE			1
+#define STATUS_TIE			2
+#define STATUS_WIN			3
+
+typedef int bool;
+#define true 1
+#define false 0
 
 struct MapSituation {
 	int mappaValue[9];
 	int score;
 	struct MapSituation *actionsToMap[9];
 };
-
 
 void CopyMapStituation(struct MapSituation *mappaFrom, struct MapSituation *mappaTo) {
 	for (int iPos=1; iPos<=9; iPos++) {
@@ -338,6 +345,24 @@ int getNextBestMove(struct MapSituation *mappa, int player) {
 	return (bestMove);
 }
 
+int GetGameStatus(struct MapSituation *mappa, int player) {
+	int m[10];
+	int mP = player;
+	for(int iMap=1; iMap<=9; iMap++) {
+		m[iMap] = (*mappa).mappaValue[iMap];
+	}
+	if ( (m[1]==mP) && (m[2]==mP) && (m[3]==mP) ) return (STATUS_WIN);
+	if ( (m[4]==mP) && (m[5]==mP) && (m[6]==mP) ) return (STATUS_WIN);
+	if ( (m[7]==mP) && (m[8]==mP) && (m[9]==mP) ) return (STATUS_WIN);
+	if ( (m[1]==mP) && (m[4]==mP) && (m[7]==mP) ) return (STATUS_WIN);
+	if ( (m[2]==mP) && (m[5]==mP) && (m[8]==mP) ) return (STATUS_WIN);
+	if ( (m[3]==mP) && (m[6]==mP) && (m[9]==mP) ) return (STATUS_WIN);
+	if ( (m[1]==mP) && (m[5]==mP) && (m[9]==mP) ) return (STATUS_WIN);
+	if ( (m[3]==mP) && (m[5]==mP) && (m[7]==mP) ) return (STATUS_WIN);
+	return(STATUS_NORMAL_GAME);
+}
+
+
 void main() {
 	struct MapSituation map;
 
@@ -347,7 +372,8 @@ void main() {
 	//PrintGrid(&map);
 	int iIter = 0;
 	int nextPos = 0;
-	while( countCellsFree(&map) > 0 ) {
+	bool bGameRunning = true;
+	while( (countCellsFree(&map)>0) && (bGameRunning==true) ) {
 		if ( (++iIter % 2) == 0) {
 			nextPos = getNextBestMove(&map, PLAYER_O);
 			setActionPlayerO(&map, nextPos);
@@ -355,7 +381,18 @@ void main() {
 			nextPos = getNextBestMove(&map, PLAYER_X);
 			setActionPlayerX(&map, nextPos);
 		}
+		if (GetGameStatus(&map, PLAYER_O) == STATUS_WIN) {
+			printf("Player 'O' wins!\n");
+			bGameRunning = false;
+		}
+		if (GetGameStatus(&map, PLAYER_X) == STATUS_WIN) {
+			printf("Player 'X' wins!\n");
+			bGameRunning = false;
+		}
 		//PrintGrid(&map);
+	}
+	if (iIter>=9) {
+		printf("Game TIE\n");
 	}
 	PrintGrid(&map);
 

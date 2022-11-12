@@ -6,6 +6,7 @@ typedef int bool;
 #define true 1
 #define false 0
 
+#define FREE_CELL	0
 #define PLAYER_O	1
 #define PLAYER_X	2
 
@@ -45,17 +46,17 @@ void PrintGrid(struct MapSituation *mappa) {
 		simboli[iPos] = listaSimboli[(*mappa).mappaValue[iPos]];
 	}
 	printf("\n");
-	printf("     |     |     \n");
-	printf("  %c  |  %c  |  %c  \n", simboli[7], simboli[8], simboli[9]);
-	printf("     |     |     \n");
-	printf("-----+-----+-----\n");
-	printf("     |     |     \n");
-	printf("  %c  |  %c  |  %c  \n", simboli[4], simboli[5], simboli[6]);
-	printf("     |     |     \n");
-	printf("-----+-----+-----\n");
-	printf("     |     |     \n");
-	printf("  %c  |  %c  |  %c  \n", simboli[1], simboli[2], simboli[3]);
-	printf("     |     |     \n");
+	printf("       |       |       \n");
+	printf("   %c   |   %c   |   %c   \n", simboli[7], simboli[8], simboli[9]);
+	printf("       |       |       \n");
+	printf("-------+-------+-------\n");
+	printf("       |       |       \n");
+	printf("   %c   |   %c   |   %c   \n", simboli[4], simboli[5], simboli[6]);
+	printf("       |       |       \n");
+	printf("-------+-------+-------\n");
+	printf("       |       |       \n");
+	printf("   %c   |   %c   |   %c   \n", simboli[1], simboli[2], simboli[3]);
+	printf("       |       |       \n");
 }
 
 
@@ -89,6 +90,9 @@ int countCellsFree(struct MapSituation *mappa) {
 int evaluateTerna(struct MapSituation *mappa, int cella1, int cella2, int cella3, int player) {
 	int valoreTernaOut = 0;
 	int contatori[3];
+	int ref_Me = 0;
+	int ref_Enemy = 0;
+	int ref_Free = FREE_CELL;
 	contatori[0]=0;	// 0 = spazio vuoto
 	contatori[1]=0;	// 1 = player O
 	contatori[2]=0;	// 2 = player X
@@ -96,10 +100,17 @@ int evaluateTerna(struct MapSituation *mappa, int cella1, int cella2, int cella3
 	contatori[(*mappa).mappaValue[cella2]]++;
 	contatori[(*mappa).mappaValue[cella3]]++;
 	if (player == PLAYER_O) {
-		valoreTernaOut = contatori[0]*1 + contatori[1]*10 - contatori[2]*15;
+		ref_Me = PLAYER_O;
+		ref_Enemy = PLAYER_X;
 	} else {
-		valoreTernaOut = contatori[0]*1 - contatori[1]*15 - contatori[2]*10;
+		ref_Me = PLAYER_X;
+		ref_Enemy = PLAYER_O;
 	}
+	if (contatori[ref_Me]==1 && contatori[ref_Free]==2) valoreTernaOut += 50;
+	if (contatori[ref_Me]==1 && contatori[ref_Enemy]==2) valoreTernaOut += 350;
+	if (contatori[ref_Me]==2 && contatori[ref_Free]==1) valoreTernaOut += 150;
+	if (contatori[ref_Me]==2 && contatori[ref_Enemy]==1) valoreTernaOut += 100;
+	if (contatori[ref_Me]==3 && contatori[ref_Free]==2) valoreTernaOut += 300;
 	return valoreTernaOut;
 }
 
@@ -128,8 +139,13 @@ int getEvaluation(struct MapSituation *mappa, int testMove, int player) {
 		setActionPlayerX(&testMap, testMove);
 	}
 	int valureAfter = evaluateMap(&testMap, player);
+	int forceCorrection = 0;
+	if (testMove==5) {
+		// Giocare la cella centrale porta svantaggio (ad una parità certa...)
+		forceCorrection = -100;
+	}
 	// Evaluation
-	return (valureAfter-valureBefore);
+	return (valureAfter - valureBefore  + forceCorrection);
 }
 
 int getNextBestMove(struct MapSituation *mappa, int player) {

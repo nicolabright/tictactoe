@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 typedef int bool;
 #define true 1
@@ -59,6 +60,151 @@ void PrintGrid(struct MapSituation *mappa) {
 	printf("       |       |       \n");
 }
 
+void PrintWeights(int weights[10]) {
+	char str_weight_1[20];
+	char str_weight_2[20];
+	char str_weight_3[20];
+	char str_weight_4[20];
+	char str_weight_5[20];
+	char str_weight_6[20];
+	char str_weight_7[20];
+	char str_weight_8[20];
+	char str_weight_9[20];
+	if (weights[1]!=-999) {
+		sprintf(str_weight_1, "%d\0", weights[1]);
+	} else {
+		strcpy(str_weight_1, " \0");
+	}
+	if (weights[2]!=-999) {
+		sprintf(str_weight_2, "%4d\0", weights[2]);
+	} else {
+		strcpy(str_weight_2, " \0");
+	}
+	if (weights[3]!=-999) {
+		sprintf(str_weight_3, "%4d\0", weights[3]);
+	} else {
+		strcpy(str_weight_3, " \0");
+	}
+	if (weights[4]!=-999) {
+		sprintf(str_weight_4, "%4d\0", weights[4]);
+	} else {
+		strcpy(str_weight_4, " \0");
+	}
+	if (weights[5]!=-999) {
+		sprintf(str_weight_5, "%4d\0", weights[5]);
+	} else {
+		strcpy(str_weight_5, " \0");
+	}
+	if (weights[6]!=-999) {
+		sprintf(str_weight_6, "%4d\0", weights[6]);
+	} else {
+		strcpy(str_weight_6, " \0");
+	}
+	if (weights[7]!=-999) {
+		sprintf(str_weight_7, "%4d\0", weights[7]);
+	} else {
+		strcpy(str_weight_7, " \0");
+	}
+	if (weights[8]!=-999) {
+		sprintf(str_weight_8, "%4d\0", weights[8]);
+	} else {
+		strcpy(str_weight_8, " \0");
+	}
+	if (weights[9]!=-999) {
+		sprintf(str_weight_9, "%4d\0", weights[9]);
+	} else {
+		strcpy(str_weight_9, " \0");
+	}
+	printf("\n");
+	printf("Valore mosse: \t\t       |       |       \n");
+	printf("\t\t\t %4s  | %4s  | %4s  \n", str_weight_7, str_weight_8, str_weight_9);
+	printf("\t\t\t       |       |       \n");
+	printf("\t\t\t-------+-------+-------\n");
+	printf("\t\t\t       |       |       \n");
+	printf("\t\t\t %4s  | %4s  | %4s  \n", str_weight_4, str_weight_5, str_weight_6);
+	printf("\t\t\t       |       |       \n");
+	printf("\t\t\t-------+-------+-------\n");
+	printf("\t\t\t       |       |       \n");
+	printf("\t\t\t %4s  | %4s  | %4s  \n", str_weight_1, str_weight_2, str_weight_3);
+	printf("\t\t\t       |       |       \n");
+}
+
+void PrintGridAndWeights(struct MapSituation *mappa, int weights[10]) {
+	//____________________012
+	char *listaSimboli = " OX\n";
+	char simboli[10];
+	for(int iPos=1; iPos<=9; iPos++) {
+		simboli[iPos] = listaSimboli[(*mappa).mappaValue[iPos]];
+	}
+	// // // // // // // //
+	char str_weight_1[20];
+	char str_weight_2[20];
+	char str_weight_3[20];
+	char str_weight_4[20];
+	char str_weight_5[20];
+	char str_weight_6[20];
+	char str_weight_7[20];
+	char str_weight_8[20];
+	char str_weight_9[20];
+	if (weights[1]!=-999) {
+		sprintf(str_weight_1, "%d\0", weights[1]);
+	} else {
+		strcpy(str_weight_1, " \0");
+	}
+	if (weights[2]!=-999) {
+		sprintf(str_weight_2, "%4d\0", weights[2]);
+	} else {
+		strcpy(str_weight_2, " \0");
+	}
+	if (weights[3]!=-999) {
+		sprintf(str_weight_3, "%4d\0", weights[3]);
+	} else {
+		strcpy(str_weight_3, " \0");
+	}
+	if (weights[4]!=-999) {
+		sprintf(str_weight_4, "%4d\0", weights[4]);
+	} else {
+		strcpy(str_weight_4, " \0");
+	}
+	if (weights[5]!=-999) {
+		sprintf(str_weight_5, "%4d\0", weights[5]);
+	} else {
+		strcpy(str_weight_5, " \0");
+	}
+	if (weights[6]!=-999) {
+		sprintf(str_weight_6, "%4d\0", weights[6]);
+	} else {
+		strcpy(str_weight_6, " \0");
+	}
+	if (weights[7]!=-999) {
+		sprintf(str_weight_7, "%4d\0", weights[7]);
+	} else {
+		strcpy(str_weight_7, " \0");
+	}
+	if (weights[8]!=-999) {
+		sprintf(str_weight_8, "%4d\0", weights[8]);
+	} else {
+		strcpy(str_weight_8, " \0");
+	}
+	if (weights[9]!=-999) {
+		sprintf(str_weight_9, "%4d\0", weights[9]);
+	} else {
+		strcpy(str_weight_9, " \0");
+	}
+	printf("\n");
+	printf("       |       |       \t\t       |       |       \n");
+	printf("   %c   |   %c   |   %c   \t\t %4s  | %4s  | %4s  \n", simboli[7], simboli[8], simboli[9], str_weight_7, str_weight_8, str_weight_9);
+	printf("       |       |       \t\t       |       |       \n");
+	printf("-------+-------+-------\t\t-------+-------+-------\n");
+	printf("       |       |       \t\t       |       |       \n");
+	printf("   %c   |   %c   |   %c   \t\t %4s  | %4s  | %4s  \n", simboli[4], simboli[5], simboli[6], str_weight_4, str_weight_5, str_weight_6);
+	printf("       |       |       \t\t       |       |       \n");
+	printf("-------+-------+-------\t\t-------+-------+-------\n");
+	printf("       |       |       \t\t       |       |       \n");
+	printf("   %c   |   %c   |   %c   \t\t %4s  | %4s  | %4s  \n", simboli[1], simboli[2], simboli[3], str_weight_1, str_weight_2, str_weight_3);
+	printf("       |       |       \t\t       |       |       \n");
+	printf("\n");
+}
 
 void setActionPlayerClear(struct MapSituation *mappa, int cellaPos) {
 	(*mappa).mappaValue[cellaPos] = 0;
@@ -142,7 +288,7 @@ int getEvaluation(struct MapSituation *mappa, int testMove, int player) {
 	int forceCorrection = 0;
 	if (testMove==5) {
 		// Giocare la cella centrale porta svantaggio (ad una parità certa...)
-		forceCorrection = -499*0;
+		forceCorrection = -50;
 	}
 	// Evaluation
 	return (valureAfter - valureBefore  + forceCorrection);
@@ -153,11 +299,16 @@ int getNextBestMove(struct MapSituation *mappa, int player) {
 	int bestMove = 0;
 	// Array di scelte
 	int bestMovesArray[9];
+	int weightsOfMove[10];
+	for (int irs=1; irs<=9; irs++) {
+		weightsOfMove[irs] = -999;
+	}
 	int count_bestMovesArray=0;
 	for (int iTestMove=1; iTestMove<=9; iTestMove++) {
 		if (!isCellUsed(mappa, iTestMove)) {
 			int newValue = getEvaluation(mappa, iTestMove, player);
-			printf("   Caso mossa in %d => V=%d\n", iTestMove, newValue);
+			weightsOfMove[iTestMove] = newValue;
+//			printf("   Caso mossa in %d => V=%d\n", iTestMove, newValue);
 			if (bestValue < newValue) {
 				bestValue = newValue;
 				// Ricomincia una serie ancora migliore di mosse
@@ -171,11 +322,12 @@ int getNextBestMove(struct MapSituation *mappa, int player) {
 		}
 	}
 	// Quindi elenca le mosse (per debug)
-	printf("Mosse possibili:\n");
-	for(int iList=1; iList<=count_bestMovesArray; iList++) {
-		printf("%d ", bestMovesArray[iList]);
-	}
-	printf("\n");
+	// // PrintWeights(weightsOfMove);
+	PrintGridAndWeights(mappa, weightsOfMove);
+//	for(int iList=1; iList<=count_bestMovesArray; iList++) {
+//		printf("%d ", bestMovesArray[iList]);
+//	}
+//	printf("\n");
 	// Quindi ne sceglie una a caso fra le migliori di egual merito
 	bestMove = bestMovesArray[(rand() % count_bestMovesArray) + 1];
 	if (player==PLAYER_O) {
@@ -192,7 +344,7 @@ void main() {
 	srand(time(0));	// Randomize
 
 	ClearMap(&map);
-	PrintGrid(&map);
+	//PrintGrid(&map);
 	int iIter = 0;
 	int nextPos = 0;
 	while( countCellsFree(&map) > 0 ) {
@@ -203,7 +355,8 @@ void main() {
 			nextPos = getNextBestMove(&map, PLAYER_X);
 			setActionPlayerX(&map, nextPos);
 		}
-		PrintGrid(&map);
+		//PrintGrid(&map);
 	}
+	PrintGrid(&map);
 
 }

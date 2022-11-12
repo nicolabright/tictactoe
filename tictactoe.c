@@ -295,7 +295,7 @@ int getEvaluation(struct MapSituation *mappa, int testMove, int player) {
 	int forceCorrection = 0;
 	if (testMove==5) {
 		// Giocare la cella centrale porta svantaggio (ad una parità certa...)
-		forceCorrection = -50;
+		forceCorrection = -60;
 	}
 	// Evaluation
 	return (valureAfter - valureBefore  + forceCorrection);
@@ -381,19 +381,21 @@ void main() {
 			nextPos = getNextBestMove(&map, PLAYER_X);
 			setActionPlayerX(&map, nextPos);
 		}
-		if (GetGameStatus(&map, PLAYER_O) == STATUS_WIN) {
-			printf("Player 'O' wins!\n");
-			bGameRunning = false;
-		}
-		if (GetGameStatus(&map, PLAYER_X) == STATUS_WIN) {
-			printf("Player 'X' wins!\n");
+		if ( (GetGameStatus(&map, PLAYER_O) == STATUS_WIN) || (GetGameStatus(&map, PLAYER_X) == STATUS_WIN) ) {
 			bGameRunning = false;
 		}
 		//PrintGrid(&map);
 	}
-	if (iIter>=9) {
-		printf("Game TIE\n");
-	}
 	PrintGrid(&map);
-
+	printf("==============================================================\n");
+	if (GetGameStatus(&map, PLAYER_O) == STATUS_WIN) {
+		printf(" Player 'O' wins!\n");
+	}
+	if (GetGameStatus(&map, PLAYER_X) == STATUS_WIN) {
+		printf("                                            Player 'X' wins!\n");
+	}
+	if (iIter>=9) {
+		printf("                          Game TIE\n");
+	}
+	printf("==============================================================\n");
 }

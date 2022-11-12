@@ -107,10 +107,10 @@ int evaluateTerna(struct MapSituation *mappa, int cella1, int cella2, int cella3
 		ref_Enemy = PLAYER_O;
 	}
 	if (contatori[ref_Me]==1 && contatori[ref_Free]==2) valoreTernaOut += 50;
+	if (contatori[ref_Me]==2 && contatori[ref_Free]==1) valoreTernaOut += 100;
+	if (contatori[ref_Me]==2 && contatori[ref_Enemy]==1) valoreTernaOut += 150;
+	if (contatori[ref_Me]==3 && contatori[ref_Free]==0) valoreTernaOut += 300;
 	if (contatori[ref_Me]==1 && contatori[ref_Enemy]==2) valoreTernaOut += 350;
-	if (contatori[ref_Me]==2 && contatori[ref_Free]==1) valoreTernaOut += 150;
-	if (contatori[ref_Me]==2 && contatori[ref_Enemy]==1) valoreTernaOut += 100;
-	if (contatori[ref_Me]==3 && contatori[ref_Free]==2) valoreTernaOut += 300;
 	return valoreTernaOut;
 }
 
@@ -142,7 +142,7 @@ int getEvaluation(struct MapSituation *mappa, int testMove, int player) {
 	int forceCorrection = 0;
 	if (testMove==5) {
 		// Giocare la cella centrale porta svantaggio (ad una parità certa...)
-		forceCorrection = -100;
+		forceCorrection = -499*0;
 	}
 	// Evaluation
 	return (valureAfter - valureBefore  + forceCorrection);
@@ -177,9 +177,12 @@ int getNextBestMove(struct MapSituation *mappa, int player) {
 	}
 	printf("\n");
 	// Quindi ne sceglie una a caso fra le migliori di egual merito
-	bestMove = bestMovesArray[ (rand() % count_bestMovesArray) + 1 ];
-	printf("Valore schema: O => %d | X => %d\n", evaluateMap(mappa, PLAYER_O), evaluateMap(mappa, PLAYER_X));
-	printf("===> PLAYER=%d @ posiz=%d\n", player, bestMove);
+	bestMove = bestMovesArray[(rand() % count_bestMovesArray) + 1];
+	if (player==PLAYER_O) {
+		printf("Valore mossa scelta PLAYER O su [%d]=> %d\n", bestMove, bestValue);
+	} else {
+		printf("Valore mosse scelta PLAYER X su [%d]=> %d\n", bestMove, bestValue);
+	}
 	return (bestMove);
 }
 
